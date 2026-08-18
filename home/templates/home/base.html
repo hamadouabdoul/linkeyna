@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">HOME</a></li>
+            <li><a href="{% url 'conversion_page' %}">CONVERTIR</a></li>
+            <li><a href="#">À PROPOS</a></li>
+        </ul>
+    </nav>
+    {% block content %}
+    {% endblock %}
+
+    <footer class="Tu vas mettre les deux div cote à code ">
+        <div>
+            <ul>
+                <li><a href="{% url 'home' %}">HOME</a></li>
+                <li><a href="{% url 'conversion_page' %}">CONVERTIR</a></li>
+                <li><a href="#">À PROPOS</a></li>
+            </ul>
+        </div>
+        <div>
+            <h2>
+                By Wahid DEV
+                <a href="https://www.youtube.com/channel/UCudwCwO6e7dnKPf5Yb-IzTQ"><span>Abonne toi à la chaîne Youtube</span><Span>ICONE Youtube</Span></a>
+                <a href="https://wa.me/+22791334383"><Span> ICONE whatsapp+227 91 33 43 83</Span></a>
+            </h2>
+        </div>
+    </footer>
+    
+</body>
+</html>

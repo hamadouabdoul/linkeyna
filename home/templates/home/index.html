@@ -1,0 +1,23 @@
+{% extends "home/base.html" %}
+
+{% block title %}Home - Linkeyna{% endblock %}
+
+{% block content %}
+<h1>
+    Bienvenue sur LINKEYNA
+</h1>
+<h3>
+    Racourcicez vos lien et rendez lzs plus attractif
+</h3>
+
+<a href="{% url 'conversion_page' %}">Commencer </a>
+
+Comment ça fonctionne?
+Étape 1 : copie ton lien 
+Étape 2 : vas sur <a href="{% url 'conversion_page' %}">la page de conversion</a> et colle ton lien dans le formulaire 
+Étape 3 : Clique sur Convertir 
+Étape 4 : Partage ton lien avec tout le monde
+
+<span> <a href="wa.me....">Clique ici</a> et donne ton avis !</span>
+{% endblock %}
+

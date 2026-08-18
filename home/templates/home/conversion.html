@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+
+{% block title %}Conversion - LINKEYNA{% endblock %}
+
+{% block content %}
+
+        <form method="post" action="{% url 'conversion_page' %}">
+            {% csrf_token %}
+            {{ formulaire }}
+            <button name="convertir" value="convertir" type="submit">Convertir</button>
+            <!-- Ajoute un regex pour que le formulaire n'accepte que les url sous forme de www.exemple.com (sans le https ou http)  -->
+        </form>
+
+
+        
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "home/base.html" %}
+
+{% block title %}Redirection - LINKEYNA{% endblock %}
+
+{% block content %}
+
+    {% if r %}
+    <h1>Lien générer avec linkeyna</h1>
+    <div>
+        
+        <a href="https://{{ r.old_link }}">
+            <div>
+                Cliquez ici pour ouvrir la page
+            </div>
+        </a>
+        <br><br><br>
+        <div>
+            <a href="{% url 'conversion_page' %}">
+                <div>
+                    Cliquez ici pour générer votre propre lien racourcis
+                </div>
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <h1>Ce lien ntKrPQ3o'existe pas chez linkeyna</h1>
+
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "home/base.html" %}
+
+{% block title %}Resultat - LINKEYNA{% endblock %}
+
+{% block content %}
+
+    {% if r %}
+    <div>
+
+        <div>
+            <span>Ancien : {{ r.old_link }}</span>
+            <span>Nouveau : linkeyna.pythonanywhere.com/redirect/{{ r.new_link }}</span>
+        </div>
+        <div>
+            <button>Copier</button>
+            <button>Partager</button>
+        </div>
+        <div>
+            icone whatapp linkdin facebook 
+        </div>
+        <div>
+            <a href="{% url 'conversion_page' %}">Nouvelle conversion</a>
+        </div>
+    </div>
+    {% else %}
+    <h1>{{ id }} n'existe pas chez linkeyna</h1>
+
+    {% endif %}
+        
+{% endblock %}
