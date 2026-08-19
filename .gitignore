@@ -1,0 +1,29 @@
+# Environnement virtuel
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-3
+media/
+
+# Migrations (reset à 0 chez le clone)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Config sensible
+.env
+*.env
+
+# Éditeurs / OS
+.vscode/
+.idea/
+.DS_Store
