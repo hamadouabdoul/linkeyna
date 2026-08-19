@@ -1,31 +1,198 @@
 {% extends "home/base.html" %}
 
-{% block title %}Redirection - LINKEYNA{% endblock %}
+{% block title %}Redirection – LINKEYNA{% endblock %}
 
 {% block content %}
 
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE DE REDIRECTION
+     Intermédiaire : affiche le lien original et redirige l'utilisateur.
+     Permet aussi de générer son propre lien raccourci.
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20 text-center" id="redirection">
+
     {% if r %}
-    <h1>Lien générer avec linkeyna</h1>
-    <div>
-        
-        <a href="https://{{ r.old_link }}">
-            <div>
-                Cliquez ici pour ouvrir la page
+
+    <!-- Lien trouvé → page intermédiaire de redirection -->
+    <div class="animate-fade-in">
+
+        <!-- Icone lien -->
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full
+                    bg-wisteria/10 border border-wisteria/20 mb-6 animate-pulse-soft">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-wisteria" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+        </div>
+
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-white mb-2">
+            Lien généré avec Linkeyna
+        </h1>
+        <p class="text-wisteria/50 text-sm mb-8 max-w-sm mx-auto">
+            Tu es sur le point de quitter Linkeyna et d'accéder à la page de destination.
+        </p>
+
+        <!-- Carte destination -->
+        <div class="w-full max-w-md mx-auto bg-white/5 border border-wisteria/15 rounded-2xl
+                    p-6 mb-8 shadow-glow-wisteria animate-slide-up">
+
+            <p class="text-xs uppercase tracking-widest text-wisteria/35 mb-2">Destination</p>
+
+            <!-- Lien de destination -->
+            <a href="https://{{ r.old_link }}"
+               id="destination-link"
+               target="_blank" rel="noopener"
+               class="flex items-center justify-center gap-3 bg-sunglow text-purple-dark
+                      font-display font-bold text-sm px-6 py-4 rounded-xl w-full
+                      hover:bg-sunglow-dark hover:shadow-glow-sunglow transition-all duration-200
+                      active:scale-95">
+                <!-- Icone externe -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                Ouvrir la page
+            </a>
+
+            <!-- URL de destination (tronquée si longue) -->
+            <p class="mt-3 text-wisteria/30 text-xs truncate">
+                → https://{{ r.old_link }}
+            </p>
+        </div>
+
+        <!-- Compteur de redirection automatique (JS) -->
+        <div id="auto-redirect-zone" class="mb-8">
+            <p class="text-wisteria/40 text-sm">
+                Redirection automatique dans
+                <span id="countdown" class="text-sunglow font-bold">5</span>s…
+            </p>
+            <!-- Barre de progression -->
+            <div class="mt-3 mx-auto w-48 h-1 bg-wisteria/10 rounded-full overflow-hidden">
+                <div id="progress-bar"
+                     class="h-full bg-sunglow rounded-full transition-none"
+                     style="width:100%"></div>
             </div>
-        </a>
-        <br><br><br>
-        <div>
-            <a href="{% url 'conversion_page' %}">
-                <div>
-                    Cliquez ici pour générer votre propre lien racourcis
-                </div>
+            <!-- Bouton annuler le compte à rebours -->
+            <button id="cancel-redirect"
+                    class="mt-3 text-wisteria/30 hover:text-wisteria text-xs transition-colors underline underline-offset-2">
+                Annuler la redirection automatique
+            </button>
+        </div>
+
+        <!-- Séparateur -->
+        <div class="flex items-center gap-4 max-w-md mx-auto mb-8">
+            <div class="flex-1 h-px bg-wisteria/10"></div>
+            <span class="text-wisteria/30 text-xs uppercase tracking-widest">ou</span>
+            <div class="flex-1 h-px bg-wisteria/10"></div>
+        </div>
+
+        <!-- CTA : créer son propre lien -->
+        <div class="max-w-sm mx-auto">
+            <p class="text-wisteria/50 text-sm mb-4">
+                Tu veux raccourcir ton propre lien ?
+            </p>
+            <a href="{% url 'conversion_page' %}"
+               id="create-own-link"
+               class="inline-flex items-center gap-2 bg-wisteria/10 border border-wisteria/20
+                      text-wisteria font-semibold text-sm px-6 py-3 rounded-full
+                      hover:bg-wisteria/20 hover:border-wisteria/40 transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Générer mon propre lien raccourci
             </a>
         </div>
     </div>
+
     {% else %}
-    <h1>Ce lien ntKrPQ3o'existe pas chez linkeyna</h1>
+
+    <!-- ── Lien introuvable ── -->
+    <div class="animate-fade-in">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full
+                    bg-red-500/10 border border-red-400/20 mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+        </div>
+
+        <h1 class="font-display text-3xl font-bold text-white mb-3">
+            Ce lien n'existe pas chez Linkeyna
+        </h1>
+        <p class="text-wisteria/50 text-sm mb-8 max-w-sm mx-auto">
+            Le code <code class="text-wisteria/70">{{ new_link }}</code> ne correspond à aucun lien raccourci. Il a peut-être été supprimé.
+        </p>
+
+        <a href="{% url 'conversion_page' %}"
+           class="inline-flex items-center gap-2 bg-sunglow text-purple-dark font-display font-bold
+                  text-sm px-6 py-3 rounded-full hover:bg-sunglow-dark transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Créer un nouveau lien
+        </a>
+    </div>
 
     {% endif %}
 
+</section>
 
+{% endblock %}
+
+
+{% block extra_js %}
+{% if r %}
+<script>
+    // ── Compte à rebours de redirection automatique ───────────────────
+    const DESTINATION = 'https://{{ r.old_link }}';
+    const TOTAL_SECS  = 5;
+
+    let secondsLeft  = TOTAL_SECS;
+    let cancelled    = false;
+
+    const countdownEl   = document.getElementById('countdown');
+    const progressBar   = document.getElementById('progress-bar');
+    const cancelBtn     = document.getElementById('cancel-redirect');
+    const redirectZone  = document.getElementById('auto-redirect-zone');
+
+    // Démarrage de la barre de progression avec transition CSS
+    // On utilise requestAnimationFrame pour que la transition se déclenche
+    requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${TOTAL_SECS}s linear`;
+        progressBar.style.width = '0%';
+    });
+
+    // Tick toutes les secondes pour le compteur numérique
+    const timer = setInterval(() => {
+        if (cancelled) {
+            clearInterval(timer);
+            return;
+        }
+        secondsLeft--;
+        if (countdownEl) countdownEl.textContent = secondsLeft;
+
+        if (secondsLeft <= 0) {
+            clearInterval(timer);
+            window.location.href = DESTINATION;
+        }
+    }, 1000);
+
+    // Bouton annuler
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            cancelled = true;
+            clearInterval(timer);
+            // Gèle la barre de progression à sa position actuelle
+            const currentWidth = progressBar.getBoundingClientRect().width;
+            const parentWidth  = progressBar.parentElement.getBoundingClientRect().width;
+            const pct = ((currentWidth / parentWidth) * 100).toFixed(1);
+            progressBar.style.transition = 'none';
+            progressBar.style.width = pct + '%';
+            // Masque la zone de compte à rebours
+            redirectZone.style.opacity = '0.3';
+            cancelBtn.textContent = 'Redirection annulée';
+            cancelBtn.disabled = true;
+        });
+    }
+</script>
+{% endif %}
 {% endblock %}

@@ -1,23 +1,194 @@
 {% extends "home/base.html" %}
 
-{% block title %}Home - Linkeyna{% endblock %}
+{% block title %}Home – Linkeyna{% endblock %}
 
 {% block content %}
-<h1>
-    Bienvenue sur LINKEYNA
-</h1>
-<h3>
-    Racourcicez vos lien et rendez lzs plus attractif
-</h3>
 
-<a href="{% url 'conversion_page' %}">Commencer </a>
+<!-- ═══════════════════════════════════════════════════════════════
+     HERO : Thèse principale – la proposition de valeur en une phrase
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="relative flex flex-col items-center justify-center text-center
+                px-6 pt-24 pb-32 overflow-hidden" id="hero">
 
-Comment ça fonctionne?
-Étape 1 : copie ton lien 
-Étape 2 : vas sur <a href="{% url 'conversion_page' %}">la page de conversion</a> et colle ton lien dans le formulaire 
-Étape 3 : Clique sur Convertir 
-Étape 4 : Partage ton lien avec tout le monde
+    <!-- Halo décoratif derrière le titre (signature visuelle de la page) -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+        <div class="w-[520px] h-[520px] rounded-full
+                    bg-wisteria/10 blur-3xl animate-pulse-soft"></div>
+    </div>
 
-<span> <a href="wa.me....">Clique ici</a> et donne ton avis !</span>
+    <!-- Étiquette catégorie -->
+    <span class="relative inline-flex items-center gap-2 bg-wisteria/10 border border-wisteria/20
+                 text-wisteria text-xs font-semibold uppercase tracking-widest
+                 px-4 py-1.5 rounded-full mb-6 animate-fade-in">
+        <!-- Point vivant -->
+        <span class="w-1.5 h-1.5 rounded-full bg-sunglow animate-pulse"></span>
+        Raccourcisseur de liens
+    </span>
+
+    <!-- Titre principal h1 -->
+    <h1 class="relative font-display text-5xl md:text-7xl font-bold text-white
+               leading-tight tracking-tight max-w-3xl animate-slide-up">
+        Bienvenue sur
+        <span class="text-sunglow drop-shadow-[0_0_20px_rgba(255,209,102,0.4)]">
+            LINKEYNA
+        </span>
+    </h1>
+
+    <!-- Accroche -->
+    <p class="relative mt-6 text-wisteria/80 text-lg md:text-xl max-w-xl animate-slide-up"
+       style="animation-delay: .1s">
+        Raccourcissez vos liens et rendez-les plus attractifs. Copiez, convertissez, partagez.
+    </p>
+
+    <!-- CTA principal -->
+    <a href="{% url 'conversion_page' %}"
+       id="hero-cta"
+       class="relative mt-10 inline-flex items-center gap-2 bg-sunglow text-purple-dark
+              font-display font-bold text-base px-8 py-3.5 rounded-full
+              hover:bg-sunglow-dark hover:shadow-glow-sunglow transition-all duration-300
+              animate-slide-up"
+       style="animation-delay: .2s">
+        Commencer maintenant
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+    </a>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     COMMENT ÇA FONCTIONNE ?
+     Étapes dans l'ordre, car c'est bien un processus séquentiel
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="max-w-5xl mx-auto px-6 md:px-12 pb-24" id="how-it-works">
+
+    <p class="text-xs uppercase tracking-widest text-wisteria/40 mb-3">Processus</p>
+    <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-14">
+        Comment ça fonctionne ?
+    </h2>
+
+    <!-- Grille des 4 étapes -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Étape 1 -->
+        <div class="step-card group relative bg-white/5 border border-wisteria/10 rounded-2xl p-6
+                    hover:border-wisteria/30 hover:bg-white/8 transition-all duration-300"
+             data-step="1">
+            <!-- Numéro -->
+            <span class="inline-block font-display text-4xl font-bold text-wisteria/20
+                         group-hover:text-sunglow/30 transition-colors mb-4">01</span>
+            <h3 class="font-display text-white font-semibold text-lg mb-2">Copie ton lien</h3>
+            <p class="text-wisteria/60 text-sm leading-relaxed">
+                Copie n'importe quelle URL, longue ou courte, dans ton presse-papiers.
+            </p>
+        </div>
+
+        <!-- Étape 2 -->
+        <div class="step-card group relative bg-white/5 border border-wisteria/10 rounded-2xl p-6
+                    hover:border-wisteria/30 hover:bg-white/8 transition-all duration-300"
+             data-step="2">
+            <span class="inline-block font-display text-4xl font-bold text-wisteria/20
+                         group-hover:text-sunglow/30 transition-colors mb-4">02</span>
+            <h3 class="font-display text-white font-semibold text-lg mb-2">Colle dans le formulaire</h3>
+            <p class="text-wisteria/60 text-sm leading-relaxed">
+                Va sur la
+                <a href="{% url 'conversion_page' %}" class="text-sunglow hover:underline">page de conversion</a>
+                et colle ton lien dans le champ.
+            </p>
+        </div>
+
+        <!-- Étape 3 -->
+        <div class="step-card group relative bg-white/5 border border-wisteria/10 rounded-2xl p-6
+                    hover:border-wisteria/30 hover:bg-white/8 transition-all duration-300"
+             data-step="3">
+            <span class="inline-block font-display text-4xl font-bold text-wisteria/20
+                         group-hover:text-sunglow/30 transition-colors mb-4">03</span>
+            <h3 class="font-display text-white font-semibold text-lg mb-2">Clique sur Convertir</h3>
+            <p class="text-wisteria/60 text-sm leading-relaxed">
+                En un clic, Linkeyna génère ton lien court unique et mémorisable.
+            </p>
+        </div>
+
+        <!-- Étape 4 -->
+        <div class="step-card group relative bg-white/5 border border-wisteria/10 rounded-2xl p-6
+                    hover:border-wisteria/30 hover:bg-white/8 transition-all duration-300"
+             data-step="4">
+            <span class="inline-block font-display text-4xl font-bold text-wisteria/20
+                         group-hover:text-sunglow/30 transition-colors mb-4">04</span>
+            <h3 class="font-display text-white font-semibold text-lg mb-2">Partage avec tous</h3>
+            <p class="text-wisteria/60 text-sm leading-relaxed">
+                Partage ton lien raccourci sur WhatsApp, Instagram, LinkedIn – partout !
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FEEDBACK : Invite à donner son avis via WhatsApp
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="max-w-5xl mx-auto px-6 md:px-12 pb-32" id="feedback">
+    <div class="relative flex flex-col md:flex-row items-center justify-between gap-8
+                bg-wisteria/10 border border-wisteria/20 rounded-3xl px-8 py-10
+                overflow-hidden">
+
+        <!-- Halo décoratif -->
+        <div class="absolute -right-16 -bottom-16 w-56 h-56 rounded-full
+                    bg-sunglow/10 blur-2xl pointer-events-none" aria-hidden="true"></div>
+
+        <div>
+            <p class="font-display text-2xl font-bold text-white mb-2">
+                Tu as un avis sur Linkeyna ?
+            </p>
+            <p class="text-wisteria/60 text-sm max-w-md">
+                Dis-nous ce que tu en penses directement sur WhatsApp. Ton retour compte pour améliorer l'app.
+            </p>
+        </div>
+
+        <!-- Lien WhatsApp -->
+        <a href="https://wa.me/+22791334383?text=Bonjour%20Wahid%2C%20j%27ai%20un%20avis%20sur%20Linkeyna%20%3A"
+           target="_blank" rel="noopener"
+           id="feedback-whatsapp"
+           class="flex-shrink-0 inline-flex items-center gap-3 bg-green-500 hover:bg-green-400
+                  text-white font-semibold px-6 py-3 rounded-full transition-all duration-200
+                  shadow-[0_0_20px_rgba(74,222,128,0.20)]">
+            <!-- Icone WhatsApp -->
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Donner mon avis
+        </a>
+    </div>
+</section>
+
 {% endblock %}
 
+
+{% block extra_js %}
+<script>
+    // ── Scroll reveal : les cartes apparaissent au scroll ─────────────
+    const stepCards = document.querySelectorAll('.step-card');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                // Délai en cascade selon le numéro de l'étape
+                const delay = parseInt(entry.target.dataset.step || 0) * 100;
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    // État initial pour l'animation
+    stepCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(24px)';
+        card.style.transition = 'opacity .5s ease, transform .5s ease';
+        observer.observe(card);
+    });
+</script>
+{% endblock %}

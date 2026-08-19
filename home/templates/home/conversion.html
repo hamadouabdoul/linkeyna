@@ -1,16 +1,189 @@
 {% extends "home/base.html" %}
 
-{% block title %}Conversion - LINKEYNA{% endblock %}
+{% block title %}Convertir – LINKEYNA{% endblock %}
 
 {% block content %}
 
-        <form method="post" action="{% url 'conversion_page' %}">
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE DE CONVERSION
+     Formulaire central : l'action unique de cette page
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-20" id="conversion">
+
+    <!-- En-tête -->
+    <div class="text-center mb-10 animate-fade-in">
+        <span class="inline-block text-xs uppercase tracking-widest text-wisteria/40 mb-3">
+            Étape unique
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-white">
+            Raccourcis ton lien
+        </h1>
+        <p class="mt-3 text-wisteria/60 text-sm max-w-sm mx-auto">
+            Colle ton URL ci-dessous. On s'occupe du reste.
+        </p>
+    </div>
+
+    <!-- ── Carte formulaire ── -->
+    <div class="w-full max-w-xl bg-white/5 border border-wisteria/15 rounded-3xl p-8
+                shadow-glow-wisteria animate-slide-up">
+
+        <form method="post" action="{% url 'conversion_page' %}" id="conversion-form" novalidate>
             {% csrf_token %}
-            {{ formulaire }}
-            <button name="convertir" value="convertir" type="submit">Convertir</button>
-            <!-- Ajoute un regex pour que le formulaire n'accepte que les url sous forme de www.exemple.com (sans le https ou http)  -->
+
+            <!-- Champ URL -->
+            <label for="id_old_link" class="block text-sm font-medium text-wisteria mb-2">
+                Ton lien original
+            </label>
+
+            <!-- 
+                Ajoute un regex pour que le formulaire n'accepte que les URL
+                sous la forme www.exemple.com (sans le https ou http).
+                Le pattern HTML5 est complété par la validation JS plus bas.
+            -->
+            <div class="relative">
+                <!-- Icone lien -->
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-wisteria/40 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                              d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 01-5.656-5.656l-1.1 1.1"/>
+                    </svg>
+                </span>
+
+                <!-- Input : le formulaire Django injecte {{ formulaire }} mais on personnalise l'input -->
+                <input
+                    type="text"
+                    id="id_old_link"
+                    name="old_link"
+                    placeholder="www.exemple.com"
+                    autocomplete="url"
+                    spellcheck="false"
+                    pattern="^(?!https?://)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$"
+                    required
+                    class="w-full bg-purple-dark/60 border border-wisteria/20 rounded-xl
+                           pl-12 pr-4 py-3.5 text-white text-sm
+                           placeholder:text-wisteria/30
+                           focus:outline-none focus:border-sunglow focus:ring-1 focus:ring-sunglow/40
+                           transition-all duration-200"
+                >
+            </div>
+
+            <!-- Message d'erreur de validation (géré par JS) -->
+            <p id="url-error"
+               class="hidden mt-2 text-red-400 text-xs flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span id="url-error-msg">Format invalide. Utilise : www.exemple.com</span>
+            </p>
+
+            <!-- Indice format -->
+            <p class="mt-2 text-wisteria/35 text-xs">
+                Format attendu : <code class="text-wisteria/50">www.exemple.com</code> — sans http/https
+            </p>
+
+            <!-- Bouton Convertir -->
+            <button
+                type="submit"
+                id="submit-btn"
+                name="convertir"
+                value="convertir"
+                class="mt-6 w-full flex items-center justify-center gap-2
+                       bg-sunglow text-purple-dark font-display font-bold text-sm
+                       px-6 py-3.5 rounded-xl
+                       hover:bg-sunglow-dark hover:shadow-glow-sunglow
+                       active:scale-95
+                       transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                <!-- Icone de départ -->
+                <svg id="btn-icon" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.381z" clip-rule="evenodd"/>
+                </svg>
+                <!-- Spinner (masqué par défaut, affiché lors de l'envoi) -->
+                <svg id="btn-spinner" xmlns="http://www.w3.org/2000/svg" class="hidden w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12a8 8 0 018-8v8z"/>
+                </svg>
+                <span id="btn-label">Convertir</span>
+            </button>
         </form>
+    </div>
+
+    <!-- Lien retour accueil -->
+    <a href="{% url 'home' %}" class="mt-8 text-wisteria/40 hover:text-wisteria text-sm transition-colors" id="back-home">
+        ← Retour à l'accueil
+    </a>
+</section>
+
+{% endblock %}
 
 
-        
+{% block extra_js %}
+<script>
+    // ── Validation JS du formulaire ──────────────────────────────────
+    // Regex : accepte www.exemple.com, sous-domaines, chemins — sans http/https
+    const URL_REGEX = /^(?!https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+
+    const form      = document.getElementById('conversion-form');
+    const input     = document.getElementById('id_old_link');
+    const errorBox  = document.getElementById('url-error');
+    const errorMsg  = document.getElementById('url-error-msg');
+    const btnLabel  = document.getElementById('btn-label');
+    const btnIcon   = document.getElementById('btn-icon');
+    const btnSpinner= document.getElementById('btn-spinner');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Affiche / cache l'erreur
+    function showError(msg) {
+        errorMsg.textContent = msg;
+        errorBox.classList.remove('hidden');
+        input.classList.add('border-red-400');
+        input.classList.remove('border-wisteria/20');
+    }
+
+    function clearError() {
+        errorBox.classList.add('hidden');
+        input.classList.remove('border-red-400');
+        input.classList.add('border-wisteria/20');
+    }
+
+    // Validation à la frappe (retour immédiat)
+    input.addEventListener('input', () => {
+        const val = input.value.trim();
+        if (!val) {
+            clearError();
+            return;
+        }
+        // Avertissement si l'utilisateur tape http/https
+        if (/^https?:\/\//i.test(val)) {
+            showError('Retire le "http://" ou "https://" et garde seulement www.exemple.com');
+        } else if (!URL_REGEX.test(val)) {
+            showError('Format invalide. Utilise : www.exemple.com');
+        } else {
+            clearError();
+        }
+    });
+
+    // Validation à la soumission
+    form.addEventListener('submit', (e) => {
+        const val = input.value.trim();
+
+        // Si la valeur commence par http, on essaie de la nettoyer automatiquement
+        if (/^https?:\/\//i.test(val)) {
+            input.value = val.replace(/^https?:\/\//i, '');
+        }
+
+        if (!URL_REGEX.test(input.value.trim())) {
+            e.preventDefault();
+            showError('Colle une URL valide au format www.exemple.com (sans http/https).');
+            input.focus();
+            return;
+        }
+
+        // Affiche le spinner pendant l'envoi
+        btnIcon.classList.add('hidden');
+        btnSpinner.classList.remove('hidden');
+        btnLabel.textContent = 'Conversion…';
+        submitBtn.disabled = true;
+    });
+</script>
 {% endblock %}

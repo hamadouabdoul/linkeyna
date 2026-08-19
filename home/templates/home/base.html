@@ -3,35 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Linkeyna – Raccourcissez vos liens et rendez-les plus attractifs. Partagez facilement.">
     <title>{% block title %} {% endblock %}</title>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'home' %}">HOME</a></li>
-            <li><a href="{% url 'conversion_page' %}">CONVERTIR</a></li>
-            <li><a href="#">À PROPOS</a></li>
-        </ul>
-    </nav>
-    {% block content %}
-    {% endblock %}
 
-    <footer class="Tu vas mettre les deux div cote à code ">
-        <div>
-            <ul>
-                <li><a href="{% url 'home' %}">HOME</a></li>
-                <li><a href="{% url 'conversion_page' %}">CONVERTIR</a></li>
-                <li><a href="#">À PROPOS</a></li>
-            </ul>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts : Inter pour le corps, Space Grotesk pour les titres -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- Palette : Dark Purple #210B2C / Wisteria #BC96E6 / Sunglow #FFD166 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        purple:  { dark: '#210B2C', DEFAULT: '#2d1040' },
+                        wisteria: { light: '#d4b5f0', DEFAULT: '#BC96E6', dark: '#9b6fd4' },
+                        sunglow:  { light: '#ffe499', DEFAULT: '#FFD166', dark: '#e6b94d' },
+                    },
+                    fontFamily: {
+                        sans:    ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        /* Dégradé signature du fond principal */
+                        'brand-gradient': 'radial-gradient(ellipse at top left, #3a1458 0%, #210B2C 55%, #150720 100%)',
+                    },
+                    boxShadow: {
+                        'glow-wisteria': '0 0 24px 4px rgba(188,150,230,0.25)',
+                        'glow-sunglow':  '0 0 24px 4px rgba(255,209,102,0.30)',
+                    },
+                    animation: {
+                        'fade-in':   'fadeIn .5s ease forwards',
+                        'slide-up':  'slideUp .5s ease forwards',
+                        'pulse-soft':'pulseSoft 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn:    { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+                        slideUp:   { '0%': { opacity: 0, transform: 'translateY(20px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+                        pulseSoft: { '0%,100%': { opacity: .6 }, '50%': { opacity: 1 } },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Scrollbar assortie à la marque */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #210B2C; }
+        ::-webkit-scrollbar-thumb { background: #BC96E6; border-radius: 3px; }
+
+        /* Focus visible accessible */
+        :focus-visible { outline: 2px solid #FFD166; outline-offset: 3px; }
+
+        /* Transition globale pour les liens */
+        a { transition: color .2s, opacity .2s; }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-brand-gradient min-h-screen font-sans text-wisteria-light antialiased">
+
+    <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+    <!-- Tu vas mettre le logo à gauche et les liens à droite -->
+    <nav id="main-nav" class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-6 md:px-12 py-4
+                               bg-purple-dark/70 backdrop-blur-md border-b border-wisteria/10">
+
+        <!-- Logo / Marque -->
+        <a href="{% url 'home' %}" class="font-display text-2xl font-bold tracking-tight text-white
+                                           hover:text-sunglow transition-colors" id="nav-logo">
+            Link<span class="text-sunglow">eyna</span>
+        </a>
+
+        <!-- Menu desktop -->
+        <ul class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest">
+            <li><a href="{% url 'home' %}"          class="text-wisteria hover:text-sunglow" id="nav-home">Home</a></li>
+            <li><a href="{% url 'conversion_page' %}" class="text-wisteria hover:text-sunglow" id="nav-convertir">Convertir</a></li>
+            <li><a href="#"                          class="text-wisteria hover:text-sunglow" id="nav-apropos">À propos</a></li>
+        </ul>
+
+        <!-- CTA desktop -->
+        <a href="{% url 'conversion_page' %}"
+           class="hidden md:inline-flex items-center gap-2 bg-sunglow text-purple-dark font-semibold
+                  text-sm px-5 py-2 rounded-full hover:bg-sunglow-dark transition-colors shadow-glow-sunglow"
+           id="nav-cta">
+            Raccourcir un lien
+            <!-- Flèche inline SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+        </a>
+
+        <!-- Burger menu mobile -->
+        <button id="burger-btn" class="md:hidden text-wisteria hover:text-sunglow transition-colors" aria-label="Menu">
+            <svg id="burger-icon" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Menu mobile déroulant -->
+    <div id="mobile-menu" class="fixed top-[65px] inset-x-0 z-40 hidden flex-col gap-2 bg-purple-dark/95
+                                  backdrop-blur-md border-b border-wisteria/10 px-6 py-6">
+        <a href="{% url 'home' %}"           class="text-wisteria hover:text-sunglow py-2 text-sm uppercase tracking-widest" id="mobile-home">Home</a>
+        <a href="{% url 'conversion_page' %}" class="text-wisteria hover:text-sunglow py-2 text-sm uppercase tracking-widest" id="mobile-convertir">Convertir</a>
+        <a href="#"                           class="text-wisteria hover:text-sunglow py-2 text-sm uppercase tracking-widest" id="mobile-apropos">À propos</a>
+        <a href="{% url 'conversion_page' %}" class="mt-2 inline-flex justify-center bg-sunglow text-purple-dark font-semibold
+                                                       text-sm px-5 py-2 rounded-full hover:bg-sunglow-dark" id="mobile-cta">
+            Raccourcir un lien
+        </a>
+    </div>
+
+    <!-- ═══════════════════════════ CONTENU ═══════════════════════════ -->
+    <main class="pt-20">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+    <!-- Tu vas mettre les deux div côte à côte -->
+    <footer class="border-t border-wisteria/10 bg-purple-dark/60 backdrop-blur-sm mt-20">
+        <div class="max-w-6xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row gap-10 md:gap-0 justify-between items-start">
+
+            <!-- Colonne 1 : Navigation footer -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-wisteria/50 mb-4">Navigation</p>
+                <ul class="flex flex-col gap-2">
+                    <li><a href="{% url 'home' %}"           class="text-wisteria/70 hover:text-sunglow text-sm" id="footer-home">Home</a></li>
+                    <li><a href="{% url 'conversion_page' %}" class="text-wisteria/70 hover:text-sunglow text-sm" id="footer-convertir">Convertir</a></li>
+                    <li><a href="#"                           class="text-wisteria/70 hover:text-sunglow text-sm" id="footer-apropos">À propos</a></li>
+                </ul>
+            </div>
+
+            <!-- Colonne 2 : Infos créateur + réseaux -->
+            <div class="flex flex-col gap-4">
+                <p class="font-display text-lg font-bold text-white">By <span class="text-sunglow">Wahid DEV</span></p>
+
+                <!-- Lien YouTube avec vrai icone SVG -->
+                <a href="https://www.youtube.com/channel/UCudwCwO6e7dnKPf5Yb-IzTQ"
+                   target="_blank" rel="noopener"
+                   class="flex items-center gap-3 text-wisteria/70 hover:text-red-400 transition-colors text-sm"
+                   id="footer-youtube">
+                    <!-- Icone YouTube SVG -->
+                    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    Abonne-toi à la chaîne
+                </a>
+
+                <!-- Lien WhatsApp avec vrai icone SVG -->
+                <a href="https://wa.me/+22791334383"
+                   target="_blank" rel="noopener"
+                   class="flex items-center gap-3 text-wisteria/70 hover:text-green-400 transition-colors text-sm"
+                   id="footer-whatsapp">
+                    <!-- Icone WhatsApp SVG -->
+                    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    +227 91 33 43 83
+                </a>
+            </div>
         </div>
-        <div>
-            <h2>
-                By Wahid DEV
-                <a href="https://www.youtube.com/channel/UCudwCwO6e7dnKPf5Yb-IzTQ"><span>Abonne toi à la chaîne Youtube</span><Span>ICONE Youtube</Span></a>
-                <a href="https://wa.me/+22791334383"><Span> ICONE whatsapp+227 91 33 43 83</Span></a>
-            </h2>
+
+        <!-- Copyright -->
+        <div class="border-t border-wisteria/10 py-4 text-center text-wisteria/30 text-xs">
+            © {% now "Y" %} Linkeyna · Fait avec ❤️ par Wahid DEV
         </div>
     </footer>
-    
+
+    <!-- ═══════════════════════════ JS GLOBAL ═══════════════════════════ -->
+    <script>
+        // ── Burger menu mobile ──────────────────────────────────────────
+        const burgerBtn   = document.getElementById('burger-btn');
+        const mobileMenu  = document.getElementById('mobile-menu');
+
+        burgerBtn.addEventListener('click', () => {
+            const isOpen = !mobileMenu.classList.contains('hidden');
+            if (isOpen) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            } else {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+            }
+        });
+
+        // Fermer le menu mobile en cliquant sur un lien
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            });
+        });
+
+        // ── Active nav link : met la couleur sunglow sur le lien courant ──
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('nav a, #mobile-menu a').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('text-sunglow');
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
